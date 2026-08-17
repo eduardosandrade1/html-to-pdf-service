@@ -1,0 +1,8 @@
+node_modules/
+.env
+output/*.pdf
+output-test/
+npm-debug.log*
+.DS_Store
+*.log
+coverage/

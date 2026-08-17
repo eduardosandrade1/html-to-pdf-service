@@ -1,0 +1,15 @@
+{
+  "html": "<!DOCTYPE html><html><head><style>body{font-family:Arial,sans-serif;margin:0;padding:40px;}h1{color:#1a1a1a;}.card{page-break-inside:avoid;border:1px solid #ddd;padding:16px;border-radius:8px;}</style></head><body><h1>Documento de exemplo</h1><div class=\"card\"><p>Este PDF foi gerado pelo html-to-pdf-service.</p></div></body></html>",
+  "options": {
+    "format": "A4",
+    "landscape": false,
+    "printBackground": true,
+    "preferCSSPageSize": true,
+    "margin": {
+      "top": "10mm",
+      "right": "10mm",
+      "bottom": "10mm",
+      "left": "10mm"
+    }
+  }
+}
