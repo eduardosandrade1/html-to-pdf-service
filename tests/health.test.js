@@ -111,6 +111,34 @@ test('POST /v1/pdf generates a valid PDF with correct API key', async (t) => {
   await app.close();
 });
 
+test('POST /v1/pdf generates a PDF from long HTML', async (t) => {
+  if (!(await isChromiumAvailable())) {
+    t.skip('Chromium não está instalado neste ambiente (npx playwright install chromium)');
+    return;
+  }
+
+  const paragraph = '<p>Linha de relatório com texto suficiente para simular um documento longo, com tabelas e quebras de página.</p>';
+  const html = `<!DOCTYPE html><html><head><meta charset="utf-8"><style>body{font-family:Arial,sans-serif}p{margin:0 0 8px}</style></head><body><h1>Relatório longo</h1><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7">${paragraph.repeat(4000)}</body></html>`;
+
+  const app = buildApp();
+  const response = await app.inject({
+    method: 'POST',
+    url: '/v1/pdf',
+    headers: { 'x-api-key': API_KEY },
+    payload: {
+      html,
+      options: { format: 'A4', printBackground: true, waitUntil: 'domcontentloaded' },
+    },
+  });
+
+  assert.equal(response.statusCode, 200, response.body.slice(0, 300));
+  assert.equal(response.headers['content-type'], 'application/pdf');
+  assert.equal(response.rawPayload.slice(0, 5).toString('utf8'), '%PDF-');
+  assert.ok(response.rawPayload.length > 5000);
+
+  await app.close();
+});
+
 test('POST /v1/pdf/file generates and saves a PDF, returning a URL', async (t) => {
   if (!(await isChromiumAvailable())) {
     t.skip('Chromium não está instalado neste ambiente (npx playwright install chromium)');
